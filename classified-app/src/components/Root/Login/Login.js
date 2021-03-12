@@ -1,3 +1,5 @@
+import { useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 import React from "react";
 import useForm from "react-hook-form";
 import styled from "styled-components";
@@ -17,22 +19,39 @@ const LabelText = styled.strong`
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
 `;
+    
+const LoginButton = styled.button`
+display: inline-block;
+margin-top: 0.5rem;
+`;
+
+const mutation = gql`
+mutation($email: String!, $password: String!) {
+    createUserSession(email: $email, password: $password) {
+        id
+        user {
+            email
+            id
+        }
+    }
+}
+`;
 
 const Login = () => {
+    const [createUserSession] = useMutation(mutation);
+
     const {
         formState: { isSubmitting },
         handleSubmit,
         register
     } = useForm();
 
-    const onSubmit = handleSubmit(({email, password}) => {
-        console.log(email, password);
+    const onSubmit = handleSubmit(async ({email, password}) => {
+        const result = await createUserSession({
+            variables: {email, password}
+        });
+        console.log(result);
     });
-    
-    const LoginButton = styled.button`
-        display: inline-block;
-        margin-top: 0.5rem;
-    `;
 
     return <form onSubmit={onSubmit}>
         <Label>
