@@ -86840,15 +86840,33 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _reactHooks = require("@apollo/react-hooks");
+
+var _graphqlTag = _interopRequireDefault(require("graphql-tag"));
+
 var _react = _interopRequireDefault(require("react"));
 
 var _reactRedux = require("react-redux");
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _templateObject, _templateObject2;
+var _session = require("#root/store/ducks/session");
+
+var _templateObject, _templateObject2, _templateObject3, _templateObject4;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -86856,20 +86874,42 @@ var Email = _styledComponents.default.div(_templateObject || (_templateObject = 
   return props.theme.nero;
 });
 
-var Wrapper = _styledComponents.default.div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    color: ", ";\n    font-size: 0.9rem;\n"])), function (props) {
+var LogoutLink = _styledComponents.default.a.attrs({
+  href: "#"
+})(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    color: blue;\n    display: block;\n    margin-top: 0.25rem;\n"])));
+
+var Wrapper = _styledComponents.default.div(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    color: ", ";\n    font-size: 0.9rem;\n"])), function (props) {
   return props.theme.mortar;
 });
 
+var mutation = (0, _graphqlTag.default)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    mutation($sessionId: ID!) {\n        deleteUserSession(sessionId: $sessionId)\n    }\n"])));
+
 var Account = function Account() {
+  var dispatch = (0, _reactRedux.useDispatch)();
+
+  var _useMutation = (0, _reactHooks.useMutation)(mutation),
+      _useMutation2 = _slicedToArray(_useMutation, 1),
+      deleteUserSession = _useMutation2[0];
+
   var session = (0, _reactRedux.useSelector)(function (state) {
     return state.session;
   });
-  return _react.default.createElement(Wrapper, null, "Logged in as", _react.default.createElement(Email, null, session.user.email));
+  return _react.default.createElement(Wrapper, null, "Logged in as ", _react.default.createElement(Email, null, session.user.email), _react.default.createElement(LogoutLink, {
+    onClick: function onClick(evt) {
+      evt.preventDefault();
+      dispatch((0, _session.clearSession)());
+      deleteUserSession({
+        variables: {
+          sessionId: session.id
+        }
+      });
+    }
+  }, "(Logout)"));
 };
 
 var _default = Account;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Root/AccountDetails/Account/index.js":[function(require,module,exports) {
+},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/store/ducks/session":"store/ducks/session.js"}],"components/Root/AccountDetails/Account/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -88002,9 +88042,13 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactHookForm = _interopRequireDefault(require("react-hook-form"));
 
+var _reactRedux = require("react-redux");
+
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _TextInput = _interopRequireDefault(require("#root/components/shared/TextInput"));
+
+var _session = require("#root/store/ducks/session");
 
 var _templateObject, _templateObject2, _templateObject3, _templateObject4;
 
@@ -88037,6 +88081,8 @@ var LoginButton = _styledComponents.default.button(_templateObject3 || (_templat
 var mutation = (0, _graphqlTag.default)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\nmutation($email: String!, $password: String!) {\n    createUserSession(email: $email, password: $password) {\n        id\n        user {\n            email\n            id\n        }\n    }\n}\n"])));
 
 var Login = function Login() {
+  var dispatch = (0, _reactRedux.useDispatch)();
+
   var _useMutation = (0, _reactHooks.useMutation)(mutation),
       _useMutation2 = _slicedToArray(_useMutation, 1),
       createUserSession = _useMutation2[0];
@@ -88052,7 +88098,8 @@ var Login = function Login() {
     var _ref2 = _asyncToGenerator(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee(_ref) {
-      var email, password, result;
+      var email, password, _yield$createUserSess, createdSession;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -88067,10 +88114,11 @@ var Login = function Login() {
               });
 
             case 3:
-              result = _context.sent;
-              console.log(result);
+              _yield$createUserSess = _context.sent;
+              createdSession = _yield$createUserSess.data.createUserSession;
+              dispatch((0, _session.setSession)(createdSession));
 
-            case 5:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -88102,7 +88150,7 @@ var Login = function Login() {
 
 var _default = Login;
 exports.default = _default;
-},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-hook-form":"../node_modules/react-hook-form/dist/react-hook-form.es.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/components/shared/TextInput":"components/shared/TextInput.js"}],"components/Root/AccountDetails/Login/index.js":[function(require,module,exports) {
+},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-hook-form":"../node_modules/react-hook-form/dist/react-hook-form.es.js","react-redux":"../node_modules/react-redux/es/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/components/shared/TextInput":"components/shared/TextInput.js","#root/store/ducks/session":"store/ducks/session.js"}],"components/Root/AccountDetails/Login/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -88627,7 +88675,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40927" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39899" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
