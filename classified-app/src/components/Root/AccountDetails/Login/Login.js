@@ -27,6 +27,10 @@ display: inline-block;
 margin-top: 0.5rem;
 `;
 
+const OrSignUp = styled.span`
+    font-size: 0.9rem;
+`;
+
 const mutation = gql`
 mutation($email: String!, $password: String!) {
     createUserSession(email: $email, password: $password) {
@@ -39,7 +43,7 @@ mutation($email: String!, $password: String!) {
 }
 `;
 
-const Login = () => {
+const Login = ({onChangeToSignUp: pushChangeToSignUp}) => {
     const dispatch = useDispatch();
     const [createUserSession] = useMutation(mutation);
 
@@ -69,7 +73,15 @@ const Login = () => {
             <LabelText>Password</LabelText>
             <TextInput disabled={isSubmitting} name="password" type="password" ref={register} />
         </Label>
-        <LoginButton disabled={isSubmitting} type="submit">Login</LoginButton>
+        <LoginButton disabled={isSubmitting} type="submit">
+            Login
+        </LoginButton>{" "}
+        <OrSignUp>
+            or <a href="#" onClick={evt => {
+                evt.preventDefault();
+                pushChangeToSignUp();
+            }}>Sign Up</a>
+        </OrSignUp>
     </form>;
 };
 
