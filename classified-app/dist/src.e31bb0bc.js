@@ -86852,7 +86852,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _session = require("#root/store/ducks/session");
 
-var _templateObject, _templateObject2, _templateObject3, _templateObject4;
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -86878,18 +86878,27 @@ var LogoutLink = _styledComponents.default.a.attrs({
   href: "#"
 })(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    color: blue;\n    display: block;\n    margin-top: 0.25rem;\n"])));
 
-var Wrapper = _styledComponents.default.div(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    color: ", ";\n    font-size: 0.9rem;\n"])), function (props) {
+var DeleteUser = _styledComponents.default.a.attrs({
+  href: "#"
+})(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    color: blue;\n    display: block;\n    margin-top: 0.25rem;\n"])));
+
+var Wrapper = _styledComponents.default.div(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    color: ", ";\n    font-size: 0.9rem;\n"])), function (props) {
   return props.theme.mortar;
 });
 
-var mutation = (0, _graphqlTag.default)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    mutation($sessionId: ID!) {\n        deleteUserSession(sessionId: $sessionId)\n    }\n"])));
+var userMutation = (0, _graphqlTag.default)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n    mutation($userId: ID!) {\n        deleteUser(userId: $userId)\n    }\n"])));
+var userSessionMutation = (0, _graphqlTag.default)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n    mutation($sessionId: ID!) {\n        deleteUserSession(sessionId: $sessionId)\n    }\n"])));
 
 var Account = function Account() {
   var dispatch = (0, _reactRedux.useDispatch)();
 
-  var _useMutation = (0, _reactHooks.useMutation)(mutation),
+  var _useMutation = (0, _reactHooks.useMutation)(userMutation),
       _useMutation2 = _slicedToArray(_useMutation, 1),
-      deleteUserSession = _useMutation2[0];
+      deleteUser = _useMutation2[0];
+
+  var _useMutation3 = (0, _reactHooks.useMutation)(userSessionMutation),
+      _useMutation4 = _slicedToArray(_useMutation3, 1),
+      deleteUserSession = _useMutation4[0];
 
   var session = (0, _reactRedux.useSelector)(function (state) {
     return state.session;
@@ -86904,7 +86913,24 @@ var Account = function Account() {
         }
       });
     }
-  }, "(Logout)"));
+  }, "(Logout)"), _react.default.createElement(DeleteUser, {
+    onClick: function onClick(evt) {
+      if (window.confirm("Do you want to delete " + session.user.email + " ?")) {
+        evt.preventDefault();
+        dispatch((0, _session.clearSession)());
+        deleteUserSession({
+          variables: {
+            sessionId: session.id
+          }
+        });
+        deleteUser({
+          variables: {
+            userId: session.user.id
+          }
+        });
+      }
+    }
+  }, "(Delete User)"));
 };
 
 var _default = Account;
@@ -97022,7 +97048,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38853" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43183" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -18,12 +18,24 @@ const LogoutLink = styled.a.attrs({href: "#"})`
     margin-top: 0.25rem;
 `;
 
+const DeleteUser = styled.a.attrs({href: "#"})`
+    color: blue;
+    display: block;
+    margin-top: 0.25rem;
+`;
+
 const Wrapper = styled.div`
     color: ${props => props.theme.mortar};
     font-size: 0.9rem;
 `;
 
-const mutation = gql`
+const userMutation = gql`
+    mutation($userId: ID!) {
+        deleteUser(userId: $userId)
+    }
+`;
+
+const userSessionMutation = gql`
     mutation($sessionId: ID!) {
         deleteUserSession(sessionId: $sessionId)
     }
@@ -31,7 +43,8 @@ const mutation = gql`
 
 const Account = () => {
     const dispatch = useDispatch();
-    const [deleteUserSession] = useMutation(mutation);
+    const [deleteUser] = useMutation(userMutation);
+    const [deleteUserSession] = useMutation(userSessionMutation);
     const session = useSelector(state => state.session);
 
     return (
@@ -42,6 +55,14 @@ const Account = () => {
                     dispatch(clearSession());
                     deleteUserSession({variables: {sessionId: session.id}});
                 }}>(Logout)</LogoutLink>
+                <DeleteUser onClick={evt => {
+                    if(window.confirm("Do you want to delete " + session.user.email + " ?")) {
+                        evt.preventDefault();
+                        dispatch(clearSession());
+                        deleteUserSession({variables: {sessionId: session.id}});
+                        deleteUser({variables: {userId: session.user.id}});
+                    }
+                }}>(Delete User)</DeleteUser>
             </Wrapper>
     );
 };

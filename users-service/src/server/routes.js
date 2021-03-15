@@ -93,6 +93,23 @@ const setupRoutes = app => {
             return next(e);
         }
     });
+    
+    app.delete("/users/:userId", async (req, res, next) => {
+        try {
+            const user = await User.findByPk(req.params.userId);
+
+            if(!user) {
+                return next(new Error("Invalid User ID!"));
+            }
+
+            await user.destroy();
+
+            return res.end();
+        }
+        catch (e) {
+            return next(e);
+        }
+    });
 
     app.get("/users/:userId", async (req, res, next) => {
         try {
