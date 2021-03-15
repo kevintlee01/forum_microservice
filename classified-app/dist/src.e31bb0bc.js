@@ -96583,7 +96583,71 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = _AccountDetails.default;
 exports.default = _default;
-},{"./AccountDetails":"components/Root/AccountDetails/AccountDetails.js"}],"components/Root/Root.js":[function(require,module,exports) {
+},{"./AccountDetails":"components/Root/AccountDetails/AccountDetails.js"}],"components/Root/Listings/Listings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _reactHooks = require("@apollo/react-hooks");
+
+var _graphqlTag = _interopRequireDefault(require("graphql-tag"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _templateObject, _templateObject2, _templateObject3, _templateObject4;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var Description = _styledComponents.default.p(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    margin-bottom: 0;\n"])));
+
+var Listing = _styledComponents.default.div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    padding: 1rem 0;\n\n    :not(:last-child) {\n        border-bottom: 1px solid ", "\n    }\n"])), function (props) {
+  return props.theme.veryLightGray;
+});
+
+var Title = _styledComponents.default.strong(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    display: block;\n    font-size: 1.5rem;\n    font-weight: 700;\n"])));
+
+var query = (0, _graphqlTag.default)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    {\n        listings {\n            description\n            id\n            title\n        }\n    }\n"])));
+
+var Listings = function Listings() {
+  var _useQuery = (0, _reactHooks.useQuery)(query),
+      data = _useQuery.data,
+      loading = _useQuery.loading;
+
+  if (loading) {
+    return "Loading...";
+  }
+
+  return _react.default.createElement("div", null, data.listings.map(function (listing) {
+    return _react.default.createElement(Listing, {
+      key: listing.id
+    }, _react.default.createElement(Title, null, listing.title), _react.default.createElement(Description, null, listing.description));
+  }));
+};
+
+var _default = Listings;
+exports.default = _default;
+},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Root/Listings/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Listings = _interopRequireDefault(require("./Listings"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = _Listings.default;
+exports.default = _default;
+},{"./Listings":"components/Root/Listings/Listings.js"}],"components/Root/Root.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -96604,6 +96668,8 @@ var _graphqlClient = _interopRequireDefault(require("#root/api/graphqlClient"));
 var _session = require("#root/store/ducks/session");
 
 var _AccountDetails = _interopRequireDefault(require("./AccountDetails"));
+
+var _Listings = _interopRequireDefault(require("./Listings"));
 
 var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5;
 
@@ -96663,12 +96729,12 @@ var Root = function Root() {
     return "Loading...";
   }
 
-  return _react.default.createElement(Wrapper, null, _react.default.createElement(Container, null, _react.default.createElement(Content, null, "Content"), _react.default.createElement(Sidebar, null, _react.default.createElement(_AccountDetails.default, null))));
+  return _react.default.createElement(Wrapper, null, _react.default.createElement(Container, null, _react.default.createElement(Content, null, _react.default.createElement(_Listings.default, null)), _react.default.createElement(Sidebar, null, _react.default.createElement(_AccountDetails.default, null))));
 };
 
 var _default = Root;
 exports.default = _default;
-},{"graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/api/graphqlClient":"api/graphqlClient.js","#root/store/ducks/session":"store/ducks/session.js","./AccountDetails":"components/Root/AccountDetails/index.js"}],"components/Root/index.js":[function(require,module,exports) {
+},{"graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/api/graphqlClient":"api/graphqlClient.js","#root/store/ducks/session":"store/ducks/session.js","./AccountDetails":"components/Root/AccountDetails/index.js","./Listings":"components/Root/Listings/index.js"}],"components/Root/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -97048,7 +97114,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43183" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36387" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
