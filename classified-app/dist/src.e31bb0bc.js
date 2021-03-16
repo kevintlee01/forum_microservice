@@ -96583,7 +96583,178 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = _AccountDetails.default;
 exports.default = _default;
-},{"./AccountDetails":"components/Root/AccountDetails/AccountDetails.js"}],"components/Root/Listings/Listings.js":[function(require,module,exports) {
+},{"./AccountDetails":"components/Root/AccountDetails/AccountDetails.js"}],"components/shared/TextArea.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _templateObject;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var TextArea = _styledComponents.default.textarea(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    border: 1px solid ", ";\n    box-sizing: border-box;\n    display: block;\n    font-size: 0.9rem;\n    padding: 0.25rem;\n    resize: vertical;\n    width: 100%;\n"])), function (props) {
+  return props.theme.veryLightGray;
+});
+
+var _default = TextArea;
+exports.default = _default;
+},{"styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Root/Listings/AddListing/AddListing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _reactHooks = require("@apollo/react-hooks");
+
+var _graphqlTag = _interopRequireDefault(require("graphql-tag"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRedux = require("react-redux");
+
+var _reactHookForm = _interopRequireDefault(require("react-hook-form"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _TextInput = _interopRequireDefault(require("#root/components/shared/TextInput"));
+
+var _TextArea = _interopRequireDefault(require("#root/components/shared/TextArea"));
+
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var Button = _styledComponents.default.button(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    display: inline-block;\n    margin-top: 0.5rem;\n"])));
+
+var Form = _styledComponents.default.form(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    background-color: ", ";\n    margin-top: 1rem;\n    margin-bottom: 1rem;\n"])), function (props) {
+  return props.theme.whiteSmoke;
+});
+
+var Label = _styledComponents.default.label(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    display: block;\n\n    :not(:first-child) {\n        margin-top: 0.5rem;\n    }\n"])));
+
+var LabelText = _styledComponents.default.strong(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    display: block;\n    font-size: 0.9rem;\n    margin-bottom: 0.5rem;\n"])));
+
+var mutation = (0, _graphqlTag.default)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n    mutation($description: String!, $title: String!) {\n        createListing(description: $description, title: $title) {\n            id\n        }\n    }\n"])));
+
+var AddListing = function AddListing(_ref) {
+  var pushAddListing = _ref.onAddListing;
+
+  var _useMutation = (0, _reactHooks.useMutation)(mutation),
+      _useMutation2 = _slicedToArray(_useMutation, 1),
+      createListing = _useMutation2[0];
+
+  var session = (0, _reactRedux.useSelector)(function (state) {
+    return state.session;
+  });
+
+  var _useForm = (0, _reactHookForm.default)(),
+      isSubmitting = _useForm.formState.isSubmitting,
+      handleSubmit = _useForm.handleSubmit,
+      register = _useForm.register,
+      reset = _useForm.reset;
+
+  if (!session) {
+    return _react.default.createElement("p", null, "Login to Add Listing.");
+  }
+
+  var onSubmit = handleSubmit(
+  /*#__PURE__*/
+  function () {
+    var _ref3 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(_ref2) {
+      var description, title;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              description = _ref2.description, title = _ref2.title;
+              _context.next = 3;
+              return createListing({
+                variables: {
+                  description: description,
+                  title: title
+                }
+              });
+
+            case 3:
+              reset();
+              pushAddListing();
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }());
+  return _react.default.createElement(Form, {
+    onSubmit: onSubmit
+  }, _react.default.createElement(Label, null, _react.default.createElement(LabelText, null, "Title"), _react.default.createElement(_TextInput.default, {
+    disabled: isSubmitting,
+    name: "title",
+    type: "text",
+    ref: register
+  })), _react.default.createElement(Label, null, _react.default.createElement(LabelText, null, "Description"), _react.default.createElement(_TextArea.default, {
+    disabled: isSubmitting,
+    name: "description",
+    type: "text",
+    ref: register
+  })), _react.default.createElement(Button, {
+    disabled: isSubmitting,
+    type: "submit"
+  }, "Add Listing"));
+};
+
+var _default = AddListing;
+exports.default = _default;
+},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-hook-form":"../node_modules/react-hook-form/dist/react-hook-form.es.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","#root/components/shared/TextInput":"components/shared/TextInput.js","#root/components/shared/TextArea":"components/shared/TextArea.js"}],"components/Root/Listings/AddListing/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _AddListing = _interopRequireDefault(require("./AddListing"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = _AddListing.default;
+exports.default = _default;
+},{"./AddListing":"components/Root/Listings/AddListing/AddListing.js"}],"components/Root/Listings/Listings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -96598,6 +96769,8 @@ var _graphqlTag = _interopRequireDefault(require("graphql-tag"));
 var _react = _interopRequireDefault(require("react"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _AddListing = _interopRequireDefault(require("./AddListing"));
 
 var _templateObject, _templateObject2, _templateObject3, _templateObject4;
 
@@ -96618,22 +96791,27 @@ var query = (0, _graphqlTag.default)(_templateObject4 || (_templateObject4 = _ta
 var Listings = function Listings() {
   var _useQuery = (0, _reactHooks.useQuery)(query),
       data = _useQuery.data,
-      loading = _useQuery.loading;
+      loading = _useQuery.loading,
+      refetch = _useQuery.refetch;
 
   if (loading) {
     return "Loading...";
   }
 
-  return _react.default.createElement("div", null, data.listings.map(function (listing) {
+  return _react.default.createElement("div", null, _react.default.createElement("div", null, data.listings.map(function (listing) {
     return _react.default.createElement(Listing, {
       key: listing.id
     }, _react.default.createElement(Title, null, listing.title), _react.default.createElement(Description, null, listing.description));
+  })), _react.default.createElement(_AddListing.default, {
+    onAddListing: function onAddListing() {
+      return refetch();
+    }
   }));
 };
 
 var _default = Listings;
 exports.default = _default;
-},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Root/Listings/index.js":[function(require,module,exports) {
+},{"@apollo/react-hooks":"../node_modules/@apollo/react-hooks/index.esm.js","graphql-tag":"../node_modules/graphql-tag/src/index.js","react":"../node_modules/react/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./AddListing":"components/Root/Listings/AddListing/index.js"}],"components/Root/Listings/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -96790,13 +96968,15 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.veryLightGray = exports.nero = exports.mortar = void 0;
+exports.whiteSmoke = exports.veryLightGray = exports.nero = exports.mortar = void 0;
 var mortar = "#555555";
 exports.mortar = mortar;
 var nero = "#222222";
 exports.nero = nero;
 var veryLightGray = "#CCCCCC";
 exports.veryLightGray = veryLightGray;
+var whiteSmoke = "#F8F8F8";
+exports.whiteSmoke = whiteSmoke;
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -97114,7 +97294,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36387" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43257" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

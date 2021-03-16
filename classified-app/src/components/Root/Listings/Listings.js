@@ -3,6 +3,8 @@ import gql from "graphql-tag";
 import React from "react";
 import styled from "styled-components";
 
+import AddListing from "./AddListing";
+
 const Description = styled.p`
     margin-bottom: 0;
 `;
@@ -32,7 +34,7 @@ const query = gql`
 `;
 
 const Listings = () => {
-    const {data, loading} = useQuery(query);
+    const {data, loading, refetch} = useQuery(query);
 
     if(loading) {
         return "Loading...";
@@ -40,12 +42,15 @@ const Listings = () => {
 
     return (
         <div>
-            {data.listings.map(listing => (
-                <Listing key={listing.id}>
-                    <Title>{listing.title}</Title>
-                    <Description>{listing.description}</Description>
-                </Listing>
-            ))}
+            <div>
+                {data.listings.map(listing => (
+                    <Listing key={listing.id}>
+                        <Title>{listing.title}</Title>
+                        <Description>{listing.description}</Description>
+                    </Listing>
+                ))}
+            </div>
+            <AddListing onAddListing={() => refetch()}/>
         </div>
     )
 }
