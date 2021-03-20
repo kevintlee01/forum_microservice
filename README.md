@@ -1,4 +1,4 @@
-# microservice_graphql
+# forum_microservice
 Microservice using Node.js & GraphQL with Docker and React
 
 API Interface:
