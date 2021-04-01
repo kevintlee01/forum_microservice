@@ -9,12 +9,22 @@ GraphQL Interface:
 > docker-compose up
 http://localhost:7000/graphql
 
-View DB:
+Run Command:
 > docker-compose up
+
+View DB:
 > docker ps
 
+Setup DB:
+> docker exec -it forum_microservice_listings-service_1 bash
+> yarn db:migrate
+> exit
+> docker exec -it forum_microservice_users-service_1 bash
+> yarn db:migrate
+> exit
+
 For Listings:
-> docker exec -it microservice_graphql_listings-service-db_1 bash
+> docker exec -it forum_microservice_listings-service-db_1 bash
 > mysql -uroot -ppassword
 > SHOW DATABASES;
 > USE db;
@@ -24,7 +34,7 @@ For Listings:
 > INSERT INTO listings (id, title, description, createdAt, updatedAt) VALUES ("1", "Listing Title", "Listing Description", "2021-01-19 03:14:07.000000", "2021-01-19 03:14:07.000000");
 
 For Users:
-> docker exec -it microservice_graphql_users-service-db_1 bash
+> docker exec -it forum_microservice_users-service-db_1 bash
 > mysql -uroot -ppassword
 > SHOW DATABASES;
 > USE db;
